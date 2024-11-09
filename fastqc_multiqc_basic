@@ -1,7 +1,7 @@
 ###FastQC is used to quality control checks on raw sequence data coming from high throughput sequencing pipelines.
 ###MultiQC is a reporting tool that parses results and statistics from bioinformatics tool outputs, such as log files and console outputs. It helps to summarise experiments containing multiple samples and multiple analysis steps.
 
-
+##STEP 1 OF MG ANALYSIS
 #1. In the terminal, navigate to folder with all raw data files
 #2. Run the following code:
 
@@ -9,7 +9,7 @@ module load fastqc/"VERSION"
 mkdir fastqc_results
 fastqc -o fastqc_results -t 6 igseq_meta_raw/*.fastq.gz  
 
-
+##STEP 2 OF MG ANALYSIS
 #3. navitate to fastqc_results folder
 #4. Run the following code:
 
