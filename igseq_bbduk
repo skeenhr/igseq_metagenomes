@@ -1,6 +1,46 @@
+###BBDuk was developed to combine most common data-quality-related trimming, filtering, and masking operations into a single high-performance tool. “Duk” stands for Decontamination Using Kmers. 
+###https://jgi.doe.gov/data-and-tools/software-tools/bbtools/bb-tools-user-guide/bbduk-guide/#:~:text=BBMap%20can%20generate%20even%20more,to%20denote%20match%20and%20mismatch 
 
+###Notes: o	ref=adapters.fa ###should not need to modify this, adaptors is on the server somewhere, these are standard nexterra adaptors (as far as I know) 
 
 
 
 
 ##STEP 3 OF MG ANALYSIS: BBDUK
+
+#Navigate to folder with raw data files
+#This is a LOOP, it could be modified into an array
+
+#!/bin/sh
+#SBATCH --job-name=bbduk_loop
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -c 24
+#SBATCH --mem=100G
+#SBATCH --mail-type=END
+#SBATCH --mail-user=USER.NAME@EMAIL.COM
+#SBATCH -o bbduk_loop_%j.out
+#SBATCH -e bbduk_loop_%j.err
+#SBATCH --partition=general
+#SBATCH --qos=general
+
+module load bbmap
+
+for i in *_R1_001.fastq.gz
+
+do
+
+SAMPLE=$(echo ${i} | sed "s/_R1_001.fastq.gz//")
+
+in1_name=$SAMPLE"_R1_001.fastq.gz"
+in2_name=$SAMPLE"_R2_001.fastq.gz"
+out1_name=$SAMPLE"_R1_clean.fastq"
+out2_name=$SAMPLE"_R2_clean.fastq"
+
+bbduk.sh in1="$(echo $in1_name)" in2="$(echo $in2_name)" out1="$(echo $out1_name)" out2="$(echo $out2_name)" ref=/home/FCAM/hskeen/testing/adapters.fa ktrim=r k=23 mink=11 hdist=1 tpe tbo
+
+done
+
+
+
+
